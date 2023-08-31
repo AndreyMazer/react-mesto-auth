@@ -23,6 +23,7 @@ function Login({ onLogin }) {
         <form className="form__homepage" onSubmit={handleSubmit}>
           <div className="homepage__field">
             <input
+              value={email}
               onChange={handleEmailChange}
               type="email"
               placeholder="Email"
@@ -35,6 +36,7 @@ function Login({ onLogin }) {
           </div>
           <div className="homepage__field">
             <input
+              value={password}
               onChange={handlePasswordChange}
               type="password"
               placeholder="Пароль"

@@ -5,7 +5,7 @@ import { Routes, Route, Link } from "react-router-dom";
 function Header(props) {
   const [isActiveMenu, setIsActiveMenu] = React.useState(false);
 
-  function openMenu() {
+  function toggleMenu() {
     setIsActiveMenu(!isActiveMenu);
   }
   return (
@@ -46,7 +46,7 @@ function Header(props) {
                 className={
                   isActiveMenu ? "header__menu_active" : "header__menu"
                 }
-                onClick={openMenu}
+                onClick={toggleMenu}
               ></button>
             </>
           }

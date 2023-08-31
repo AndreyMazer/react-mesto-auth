@@ -7,19 +7,19 @@ function checkResponse(res) {
   return Promise.reject(`Ошибка ${res.status}`);
 }
 
-export const checkJwt = (JWT) => {
-  return fetch(`${BASE_URL}/user/me`, {
+export const checkJwt = (jwt) => {
+  return fetch(`${BASE_URL}/users/me`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${JWT}`,
+      Authorization: `Bearer ${jwt}`,
     },
   }).then((res) => {
     return checkResponse(res);
   });
 };
 
-export const reg = (password, email) => {
+export const register = (password, email) => {
   return fetch(`${BASE_URL}/signup`, {
     method: "POST",
     headers: {
@@ -31,7 +31,7 @@ export const reg = (password, email) => {
     return checkResponse(res);
   });
 };
-export const authorizator = (password, email) => {
+export const authorize = (password, email) => {
   return fetch(`${BASE_URL}/signin`, {
     method: "POST",
     headers: {

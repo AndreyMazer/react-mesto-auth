@@ -10,7 +10,7 @@ import EditProfilePopup from "./EditProfilePopup";
 import EditAvatarPopup from "./EditAvatarPopup";
 import AddPlacePopup from "./AddPlacePopup";
 import api from "../utils/Api";
-import { reg, authorizator, checkJwt } from "../utils/Auth";
+import { register, authorize, checkJwt } from "../utils/Auth";
 import { Routes, Route, useNavigate } from "react-router-dom";
 import Register from "./Register";
 import Login from "./Login";
@@ -26,41 +26,52 @@ function App() {
   const [currentUser, setCurrentUser] = React.useState({});
   const [cards, setCards] = React.useState([]);
   const [isInfoTooltipOpen, setInfoTooltipOpen] = React.useState(false);
-  const [message, setMessage] = React.useState(false);
+  const [message, isSuccessInfoTooltipStatus] = React.useState(false);
   const [loggedIn, setLoggedIn] = React.useState(false);
   const [userEmail, setUserEmail] = React.useState("");
   const navigate = useNavigate();
 
-  React.useEffect(() => {
+  /*React.useEffect(() => {
     Promise.all([api.getProfile(), api.getInitialCards()])
       .then(([resUser, resCard]) => {
         setCurrentUser(resUser);
         setCards(resCard);
       })
       .catch((err) => console.log(err));
-  }, []);
+  }, []);*/
 
   React.useEffect(() => {
-    handleTokenCheck();
-  });
+    if (loggedIn) {
+      Promise.all([api.getProfile(), api.getInitialCards()])
+        .then(([resUser, resCard]) => {
+          setCurrentUser(resUser);
+          setCards(resCard);
+        })
+        .catch((err) => console.log(err));
+    }
+  }, [loggedIn]);
+
+  React.useEffect(() => {
+    handleTokenCheck(loggedIn);
+  }, []);
 
   function handleRegister(email, password) {
-    reg(password, email)
+    register(password, email)
       .then((res) => {
         setInfoTooltipOpen(true);
         if (res) {
-          setMessage(true);
+          isSuccessInfoTooltipStatus(true);
           navigate("/sign-in", { replace: true });
         }
       })
       .catch(() => {
-        setMessage(false);
+        isSuccessInfoTooltipStatus(false);
         setInfoTooltipOpen(true);
       });
   }
 
   function handleLogin(email, password) {
-    authorizator(password, email)
+    authorize(password, email)
       .then((res) => {
         if (res) {
           setLoggedIn(true);
@@ -70,7 +81,7 @@ function App() {
         }
       })
       .catch(() => {
-        setMessage(false);
+        isSuccessInfoTooltipStatus(false);
         setInfoTooltipOpen(true);
       });
   }
@@ -119,7 +130,7 @@ function App() {
     api
       .deleteCard(card._id)
       .then(() => {
-        setCards((item) => item.filter((c) => c._id !== card._id && c));
+        setCards((cards) => cards.filter((c) => c._id !== card._id && c));
       })
       .catch((err) => console.log(err));
   }
@@ -137,8 +148,8 @@ function App() {
   function handleUpdateAvatar(data) {
     api
       .editAvatar(data)
-      .then((newAvatar) => {
-        setCurrentUser(newAvatar);
+      .then((userData) => {
+        setCurrentUser(userData);
         closeAllPopups();
       })
       .catch((err) => console.log(err));
