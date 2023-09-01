@@ -16,6 +16,7 @@ import Register from "./Register";
 import Login from "./Login";
 import ProtectedRouteElement from "./ProtectedRoute";
 import InfoTooltip from "./InfoTooltip";
+import { Navigate } from "react-router-dom";
 
 function App() {
   const [isEditAvatarPopupOpen, setEditAvatarPopupOpen] = React.useState(false);
@@ -26,19 +27,11 @@ function App() {
   const [currentUser, setCurrentUser] = React.useState({});
   const [cards, setCards] = React.useState([]);
   const [isInfoTooltipOpen, setInfoTooltipOpen] = React.useState(false);
-  const [message, isSuccessInfoTooltipStatus] = React.useState(false);
+  const [isSuccessInfoTooltipStatus, setIsSuccessInfoTooltipStatus] =
+    React.useState(false);
   const [loggedIn, setLoggedIn] = React.useState(false);
   const [userEmail, setUserEmail] = React.useState("");
   const navigate = useNavigate();
-
-  /*React.useEffect(() => {
-    Promise.all([api.getProfile(), api.getInitialCards()])
-      .then(([resUser, resCard]) => {
-        setCurrentUser(resUser);
-        setCards(resCard);
-      })
-      .catch((err) => console.log(err));
-  }, []);*/
 
   React.useEffect(() => {
     if (loggedIn) {
@@ -60,12 +53,12 @@ function App() {
       .then((res) => {
         setInfoTooltipOpen(true);
         if (res) {
-          isSuccessInfoTooltipStatus(true);
+          setIsSuccessInfoTooltipStatus(true);
           navigate("/sign-in", { replace: true });
         }
       })
       .catch(() => {
-        isSuccessInfoTooltipStatus(false);
+        setIsSuccessInfoTooltipStatus(false);
         setInfoTooltipOpen(true);
       });
   }
@@ -81,7 +74,7 @@ function App() {
         }
       })
       .catch(() => {
-        isSuccessInfoTooltipStatus(false);
+        setIsSuccessInfoTooltipStatus(false);
         setInfoTooltipOpen(true);
       });
   }
@@ -215,6 +208,10 @@ function App() {
               />
             }
           />
+          <Route
+            path="/*"
+            element={<Navigate to={loggedIn ? "/" : "/sign-in"} />}
+          />
         </Routes>
         <Footer />
         <EditProfilePopup
@@ -237,7 +234,7 @@ function App() {
         <InfoTooltip
           isOpen={isInfoTooltipOpen}
           onClose={closeAllPopups}
-          status={message}
+          status={isSuccessInfoTooltipStatus}
         />
       </div>
     </CurrentUserContext.Provider>
