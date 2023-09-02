@@ -1,7 +1,7 @@
 # Mesto React
 Это проект Практикума идентичный с соседним репозиторием mesto, но написанный с помощью React, где пользователь сможет делиться фотографими с другими пользователями, а также просматривать фотографии других. 
 
-* [Ссылка на проект в GitHub](https://andreymazer.github.io/mesto-react/public/index.html)
+* [Ссылка на проект в GitHub](https://andreymazer.github.io/mesto-react-auth)
 * [Ссылка на макет в Figma](https://www.figma.com/file/2cn9N9jSkmxD84oJik7xL7/JavaScript.-Sprint-4?node-id=0%3A1)
 
 # В проекте реализовано:
